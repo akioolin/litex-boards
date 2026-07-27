@@ -184,6 +184,7 @@ Some of the supported boards, see yours? Give LiteX-Boards a try!
     ├── kosagi_netv2
     ├── krtkl_snickerdoodle
     ├── lambdaconcept_ecpix5
+    ├── lattice_certus_nx_versa
     ├── lattice_certuspro_nx_evn
     ├── lattice_certuspro_nx_versa
     ├── lattice_certuspro_nx_vvml
