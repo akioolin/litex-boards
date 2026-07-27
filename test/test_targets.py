@@ -46,19 +46,19 @@ PLATFORM_EXCLUSIONS = {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
-    "efinix_titanium_ti60_f225_dev_kit": {
+    "efinix_ti60_f225_dev_kit": {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
-    "efinix_trion_t120_bga576_dev_kit": {
+    "efinix_t120_f576_dev_kit": {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
-    "efinix_trion_t20_bga256_dev_kit": {
+    "efinix_t20_f256_dev_kit": {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
-    "efinix_trion_t20_mipi_dev_kit": {
+    "efinix_t20_mipi_dev_kit": {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
@@ -74,7 +74,7 @@ PLATFORM_EXCLUSIONS = {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
-    "efinix_t8f81_dev_kit": {
+    "efinix_t8_f81_dev_kit": {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
@@ -137,19 +137,19 @@ TARGET_EXCLUSIONS = {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
-    "efinix_titanium_ti60_f225_dev_kit": {
+    "efinix_ti60_f225_dev_kit": {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
-    "efinix_trion_t120_bga576_dev_kit": {
+    "efinix_t120_f576_dev_kit": {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
-    "efinix_trion_t20_bga256_dev_kit": {
+    "efinix_t20_f256_dev_kit": {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
-    "efinix_trion_t20_mipi_dev_kit": {
+    "efinix_t20_mipi_dev_kit": {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
@@ -165,7 +165,7 @@ TARGET_EXCLUSIONS = {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
-    "efinix_t8f81_dev_kit": {
+    "efinix_t8_f81_dev_kit": {
         "category": "external_toolchain",
         "reason": "Require Efinity toolchain.",
     },
