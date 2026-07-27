@@ -74,7 +74,14 @@ class _CRG_DDR(LiteXModule):
 # BaseSoC ------------------------------------------------------------------------------------------
 
 class BaseSoC(SoCCore):
-    def __init__(self, sys_clk_freq=100e6, cpu_clk_freq=175e6, with_spi_flash=False, spi_flash_number=0, spi_flash_rate="1:1", with_led_chaser=True, **kwargs):
+    def __init__(self,
+        sys_clk_freq     = 100e6,
+        cpu_clk_freq     = 175e6,
+        with_spi_flash   = False,
+        spi_flash_number = 0,
+        spi_flash_rate   = "1:2",
+        with_led_chaser  = False,
+        **kwargs):
         platform = efinix_tz170_j484_dev_kit.Platform()
 
         # CRG --------------------------------------------------------------------------------------
@@ -138,8 +145,14 @@ def main():
     parser.add_target_argument("--with-led-chaser",  action="store_true",                             help="Enable LED Chaser.")
     args = parser.parse_args()
 
-    soc = BaseSoC(args.sys_clk_freq, args.cpu_clk_freq, args.with_spi_flash,
-                  args.spi_flash_number, args.spi_flash_rate, args.with_led_chaser, **parser.soc_argdict)
+    soc = BaseSoC(
+        sys_clk_freq     = args.sys_clk_freq,
+        cpu_clk_freq     = args.cpu_clk_freq,
+        with_spi_flash   = args.with_spi_flash,
+        spi_flash_number = args.spi_flash_number,
+        spi_flash_rate   = args.spi_flash_rate,
+        with_led_chaser  = args.with_led_chaser,
+        **parser.soc_argdict)
 
     if args.with_spi_sdcard:
         soc.add_spi_sdcard()
