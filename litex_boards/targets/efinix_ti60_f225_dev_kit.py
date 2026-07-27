@@ -11,7 +11,7 @@ from migen import *
 from litex.gen import *
 from litex.gen.genlib.misc import WaitTimer
 
-from litex_boards.platforms import efinix_titanium_ti60_f225_dev_kit
+from litex_boards.platforms import efinix_ti60_f225_dev_kit
 
 from litex.soc.cores.clock import *
 from litex.soc.integration.soc import *
@@ -71,7 +71,7 @@ class BaseSoC(SoCCore):
         remote_ip      = None,
         eth_dynamic_ip = False,
         **kwargs):
-        platform = efinix_titanium_ti60_f225_dev_kit.Platform()
+        platform = efinix_ti60_f225_dev_kit.Platform()
 
         # CRG --------------------------------------------------------------------------------------
         self.crg = _CRG(platform, sys_clk_freq)
@@ -119,7 +119,7 @@ class BaseSoC(SoCCore):
 
         # Ethernet / Etherbone ---------------------------------------------------------------------
         if with_ethernet or with_etherbone:
-            platform.add_extension(efinix_titanium_ti60_f225_dev_kit.rgmii_ethernet_qse_ios("P1"))
+            platform.add_extension(efinix_ti60_f225_dev_kit.rgmii_ethernet_qse_ios("P1"))
             pads = platform.request("eth", eth_phy)
             self.ethphy = LiteEthPHYRGMII(
                 platform           = platform,
@@ -135,7 +135,7 @@ class BaseSoC(SoCCore):
 
 def main():
     from litex.build.parser import LiteXArgumentParser
-    parser = LiteXArgumentParser(platform=efinix_titanium_ti60_f225_dev_kit.Platform, description="LiteX SoC on Efinix Titanium Ti60 F225 Dev Kit.")
+    parser = LiteXArgumentParser(platform=efinix_ti60_f225_dev_kit.Platform, description="LiteX SoC on Efinix Titanium Ti60 F225 Dev Kit.")
     parser.add_target_argument("--flash",          action="store_true",       help="Flash bitstream.")
     parser.add_target_argument("--sys-clk-freq",   default=200e6, type=float, help="System clock frequency.")
     parser.add_target_argument("--with-spi-flash", action="store_true",       help="Enable memory-mapped SPI flash.")

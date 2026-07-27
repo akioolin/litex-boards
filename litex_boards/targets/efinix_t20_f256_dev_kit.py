@@ -12,7 +12,7 @@ from migen import *
 
 from litex.gen import *
 
-from litex_boards.platforms import efinix_trion_t20_bga256_dev_kit
+from litex_boards.platforms import efinix_t20_f256_dev_kit
 
 from litex.build.io import ClkOutput
 from litex.build.generic_platform import *
@@ -61,7 +61,7 @@ class _CRG(LiteXModule):
 
 class BaseSoC(SoCCore):
     def __init__(self, sys_clk_freq=100e6, with_spi_flash=False, with_led_chaser=True, **kwargs):
-        platform = efinix_trion_t20_bga256_dev_kit.Platform()
+        platform = efinix_t20_f256_dev_kit.Platform()
 
         # CRG --------------------------------------------------------------------------------------
         self.crg = _CRG(platform, sys_clk_freq)
@@ -97,7 +97,7 @@ class BaseSoC(SoCCore):
 
 def main():
     from litex.build.parser import LiteXArgumentParser
-    parser = LiteXArgumentParser(platform=efinix_trion_t20_bga256_dev_kit.Platform, description="LiteX SoC on Efinix Trion T20 BGA256 Dev Kit.")
+    parser = LiteXArgumentParser(platform=efinix_t20_f256_dev_kit.Platform, description="LiteX SoC on Efinix Trion T20 BGA256 Dev Kit.")
     parser.add_target_argument("--flash",          action="store_true",      help="Flash bitstream.")
     parser.add_target_argument("--sys-clk-freq",   default=45e6, type=float, help="System clock frequency.")
     parser.add_target_argument("--with-spi-flash", action="store_true",      help="Enable memory-mapped SPI flash.")

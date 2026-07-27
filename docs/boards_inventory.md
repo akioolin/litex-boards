@@ -64,12 +64,12 @@ python3 .github/scripts/generate_board_inventory.py --write
 | `digilent_pynq_z1` | digilent_pynq_z1 | vivado | `125000000.0` | Video Terminal | included |
 | `digilent_zedboard` | digilent_arty, digilent_zedboard | vivado | `100000000.0` | - | included |
 | `ebaz4205` | ebaz4205 | vivado | `100000000.0` | - | included |
-| `efinix_t8f81_dev_kit` | efinix_t8f81_dev_kit | efinity | `33333000.0` | - | toolchain-gated: Require Efinity toolchain. |
+| `efinix_t120_f576_dev_kit` | efinix_t120_f576_dev_kit | efinity | `75000000.0` | Ethernet, Etherbone, SPI Flash | toolchain-gated: Require Efinity toolchain. |
+| `efinix_t20_f256_dev_kit` | efinix_t20_f256_dev_kit | efinity | `45000000.0` | SPI Flash | toolchain-gated: Require Efinity toolchain. |
+| `efinix_t20_mipi_dev_kit` | efinix_t20_mipi_dev_kit | efinity | `100000000.0` | SPI Flash | toolchain-gated: Require Efinity toolchain. |
+| `efinix_t8_f81_dev_kit` | efinix_t8_f81_dev_kit | efinity | `33333000.0` | - | toolchain-gated: Require Efinity toolchain. |
 | `efinix_ti375_c529_dev_kit` | efinix_ti375_c529_dev_kit | efinity | `100000000.0` | Ethernet, Etherbone, SDCard, SPI SDCard, SPI Flash | toolchain-gated: Require Efinity toolchain. |
-| `efinix_titanium_ti60_f225_dev_kit` | efinix_titanium_ti60_f225_dev_kit | efinity | `200000000.0` | Ethernet, Etherbone, SDCard, SPI SDCard, SPI Flash | toolchain-gated: Require Efinity toolchain. |
-| `efinix_trion_t120_bga576_dev_kit` | efinix_trion_t120_bga576_dev_kit | efinity | `75000000.0` | Ethernet, Etherbone, SPI Flash | toolchain-gated: Require Efinity toolchain. |
-| `efinix_trion_t20_bga256_dev_kit` | efinix_trion_t20_bga256_dev_kit | efinity | `45000000.0` | SPI Flash | toolchain-gated: Require Efinity toolchain. |
-| `efinix_trion_t20_mipi_dev_kit` | efinix_trion_t20_mipi_dev_kit | efinity | `100000000.0` | SPI Flash | toolchain-gated: Require Efinity toolchain. |
+| `efinix_ti60_f225_dev_kit` | efinix_ti60_f225_dev_kit | efinity | `200000000.0` | Ethernet, Etherbone, SDCard, SPI SDCard, SPI Flash | toolchain-gated: Require Efinity toolchain. |
 | `efinix_tz170_j484_dev_kit` | efinix_tz170_j484_dev_kit | efinity | `100000000.0` | SDCard, SPI SDCard, SPI Flash | toolchain-gated: Require Efinity toolchain. |
 | `efinix_xyloni_dev_kit` | efinix_xyloni_dev_kit | efinity | `33333000.0` | - | toolchain-gated: Require Efinity toolchain. |
 | `ego1` | ego1 | vivado | `100000000.0` | Video Terminal | included |

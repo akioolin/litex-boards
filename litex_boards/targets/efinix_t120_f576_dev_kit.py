@@ -14,7 +14,7 @@ from migen import *
 from litex.gen import *
 from litex.gen.genlib.misc import WaitTimer
 
-from litex_boards.platforms import efinix_trion_t120_bga576_dev_kit
+from litex_boards.platforms import efinix_t120_f576_dev_kit
 
 from litex.soc.cores.clock import *
 from litex.soc.integration.soc import *
@@ -66,10 +66,10 @@ class BaseSoC(SoCCore):
         eth_dynamic_ip  = False,
         with_led_chaser = True,
         **kwargs):
-        platform = efinix_trion_t120_bga576_dev_kit.Platform()
+        platform = efinix_t120_f576_dev_kit.Platform()
 
         # USBUART PMOD as Serial--------------------------------------------------------------------
-        platform.add_extension(efinix_trion_t120_bga576_dev_kit.usb_pmod_io("pmod_e"))
+        platform.add_extension(efinix_t120_f576_dev_kit.usb_pmod_io("pmod_e"))
         if kwargs.get("uart_name", "serial") == "serial":
             if kwargs.get("uart_name", "serial") == "serial": kwargs["uart_name"] = "usb_uart"
 
@@ -388,7 +388,7 @@ calc_result = design.auto_calc_pll_clock("dram_pll", {"CLKOUT0_FREQ": "400.0"})
 
 def main():
     from litex.build.parser import LiteXArgumentParser
-    parser = LiteXArgumentParser(platform=efinix_trion_t120_bga576_dev_kit.Platform, description="LiteX SoC on Efinix Trion T120 BGA576 Dev Kit.")
+    parser = LiteXArgumentParser(platform=efinix_t120_f576_dev_kit.Platform, description="LiteX SoC on Efinix Trion T120 BGA576 Dev Kit.")
     parser.add_target_argument("--flash",          action="store_true",      help="Flash bitstream.")
     parser.add_target_argument("--sys-clk-freq",   default=75e6, type=float, help="System clock frequency.")
     parser.add_target_argument("--with-spi-flash", action="store_true",      help="Enable memory-mapped SPI flash.")
