@@ -217,6 +217,7 @@ Some of the supported boards, see yours? Give LiteX-Boards a try!
     ├── microphase_a7_lite
     ├── microsoft_catapult_v3
     ├── mist
+    ├── mlk_cu07_ku15p
     ├── mlkpai_fs01_dr1v90m
     ├── mnt_rkx7
     ├── muselab_icesugar
