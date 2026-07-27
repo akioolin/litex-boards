@@ -61,6 +61,9 @@ class BaseSoC(SoCCore):
         # SoCCore ----------------------------------------------------------------------------------
         # Disable Integrated ROM.
         kwargs["integrated_rom_size"]  = 0
+        # Use Crossover UART by default.
+        if kwargs.get("uart_name", "serial") == "serial":
+            kwargs["uart_name"] = "crossover"
         # Set CPU variant / reset address
         if kwargs.get("cpu_type", "vexriscv") == "vexriscv":
             kwargs["cpu_variant"] = "minimal"

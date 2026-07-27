@@ -88,21 +88,21 @@ class BaseSoC(SoCCore):
     }}
 
     def __init__(self,
-            sys_clk_freq   = 100e6,
-            cpu_clk_freq   = 100e6,
-            with_spi_flash = False,
+            sys_clk_freq     = 100e6,
+            cpu_clk_freq     = 100e6,
+            with_spi_flash   = False,
             spi_flash_number = 0,
-            spi_flash_rate = "1:1",
-            with_ethernet  = False,
-            with_etherbone = False,
-            with_ptp       = False,
-            eth_phy        = "rgmii",
-            eth_ip         = "192.168.1.50",
-            remote_ip      = None,
-            eth_dynamic_ip = False,
-            ptp_p2p        = False,
-            ptp_debug      = False,
-            with_ohci      = False,
+            spi_flash_rate   = "1:2",
+            with_ethernet    = False,
+            with_etherbone   = False,
+            with_ptp         = False,
+            eth_phy          = "rgmii",
+            eth_ip           = "192.168.1.50",
+            remote_ip        = None,
+            eth_dynamic_ip   = False,
+            ptp_p2p          = False,
+            ptp_debug        = False,
+            with_ohci        = False,
             **kwargs):
         platform = efinix_ti375_c529_dev_kit.Platform()
 
@@ -403,7 +403,7 @@ class BaseSoC(SoCCore):
             # (integer) of the reference clock. If all your system clocks do not fall within
             # this range, you should dedicate one unused clock for CLKOUT0.
             pll3.create_clkout(None, 125e6, with_reset=True)
-            pll3.create_clkout(self.cd_eth_rx, 125e6,phase =270)
+            pll3.create_clkout(self.cd_eth_rx, 125e6, phase=270)
 
             platform.add_false_path_constraints(self.crg.cd_sys.clk, self.cd_eth.clk)
 
@@ -456,7 +456,7 @@ def main():
     parser = LiteXArgumentParser(platform=efinix_ti375_c529_dev_kit.Platform, description="LiteX SoC on Efinix Ti375 C529 Dev Kit.")
     parser.add_target_argument("--flash",            action="store_true",                             help="Flash bitstream.")
     parser.add_target_argument("--sys-clk-freq",     default=100e6, type=float,                       help="System clock frequency.")
-    parser.add_target_argument("--cpu-clk-freq",     default=100e6, type=float,                       help="System clock frequency.")
+    parser.add_target_argument("--cpu-clk-freq",     default=100e6, type=float,                       help="CPU clock frequency.")
     parser.add_target_argument("--with-spi-flash",   action="store_true",                             help="Enable SPI Flash.")
     parser.add_target_argument("--spi-flash-number", default=0, type=int, choices=[0, 1],             help="SPI Flash number.")
     parser.add_target_argument("--spi-flash-rate",   default="1:2", type=str, choices=["1:1", "1:2"], help="SPI Flash rate.")

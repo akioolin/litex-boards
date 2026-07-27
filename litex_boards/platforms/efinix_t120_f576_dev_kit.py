@@ -170,6 +170,15 @@ def usb_pmod_io(pmod):
         ),
     ]
 
+def i2c_pmod_io(pmod):
+    return [
+        ("i2c", 0,
+            Subsignal("sda", Pins(f"{pmod}:0")),
+            Subsignal("scl", Pins(f"{pmod}:1")),
+            IOStandard("3.3_V_LVTTL_/_LVCMOS"),
+        ),
+    ]
+
 # Platform -----------------------------------------------------------------------------------------
 
 class Platform(EfinixPlatform):
@@ -185,4 +194,6 @@ class Platform(EfinixPlatform):
 
     def do_finalize(self, fragment):
         EfinixPlatform.do_finalize(self, fragment)
-        self.add_period_constraint(self.lookup_request("clk40", loose=True), 1e9/40e6)
+        self.add_period_constraint(
+            self.lookup_request(self.default_clk_name, loose=True),
+            self.default_clk_period)
