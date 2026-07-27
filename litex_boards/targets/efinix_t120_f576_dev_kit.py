@@ -7,14 +7,14 @@
 # Copyright (c) 2021 Florent Kermarrec <florent@enjoy-digital.fr>
 # SPDX-License-Identifier: BSD-2-Clause
 
-import time
-
 from migen import *
 
 from litex.gen import *
 from litex.gen.genlib.misc import WaitTimer
 
 from litex_boards.platforms import efinix_t120_f576_dev_kit
+
+from litex.build.generic_platform import Pins, Subsignal, IOStandard
 
 from litex.soc.cores.clock import *
 from litex.soc.integration.soc import *
@@ -40,13 +40,13 @@ class _CRG(LiteXModule):
 
         self.comb += self.cd_rst.clk.eq(clk40)
 
-         # A pulse is necessary to do a reset.
+        # A pulse is necessary to do a reset.
         self.rst_pulse = Signal()
         self.reset_timer = reset_timer = ClockDomainsRenamer("rst")(WaitTimer(25e-6*platform.default_clk_freq))
         self.comb += self.rst_pulse.eq(self.rst ^ reset_timer.done)
         self.comb += reset_timer.wait.eq(self.rst)
 
-        # PLL
+        # PLL.
         self.pll = pll = TRIONPLL(platform)
         self.comb += pll.reset.eq(~rst_n | self.rst_pulse)
         pll.register_clkin(clk40, platform.default_clk_freq)
@@ -65,13 +65,14 @@ class BaseSoC(SoCCore):
         remote_ip       = None,
         eth_dynamic_ip  = False,
         with_led_chaser = True,
+        with_i2c        = False,
         **kwargs):
         platform = efinix_t120_f576_dev_kit.Platform()
 
-        # USBUART PMOD as Serial--------------------------------------------------------------------
+        # USB-UART PMOD as Serial ------------------------------------------------------------------
         platform.add_extension(efinix_t120_f576_dev_kit.usb_pmod_io("pmod_e"))
         if kwargs.get("uart_name", "serial") == "serial":
-            if kwargs.get("uart_name", "serial") == "serial": kwargs["uart_name"] = "usb_uart"
+            kwargs["uart_name"] = "usb_uart"
 
         # CRG --------------------------------------------------------------------------------------
         self.crg = _CRG(platform, sys_clk_freq)
@@ -91,15 +92,11 @@ class BaseSoC(SoCCore):
                 pads         = platform.request_all("user_led"),
                 sys_clk_freq = sys_clk_freq)
 
-        # Tristate Test ----------------------------------------------------------------------------
-        from litex.build.generic_platform import Subsignal, Pins, IOStandard
-        from litex.soc.cores.bitbang import I2CMaster
-        platform.add_extension([("i2c", 0,
-            Subsignal("sda",   Pins("T12")),
-            Subsignal("scl",   Pins("V11")),
-            IOStandard("3.3_V_LVTTL_/_LVCMOS"),
-        )])
-        self.i2c = I2CMaster(pads=platform.request("i2c"))
+        # I2C ---------------------------------------------------------------------------------------
+        if with_i2c:
+            from litex.soc.cores.bitbang import I2CMaster
+            platform.add_extension(efinix_t120_f576_dev_kit.i2c_pmod_io("pmod_a"))
+            self.i2c = I2CMaster(pads=platform.request("i2c"))
 
         # Ethernet / Etherbone ---------------------------------------------------------------------
         if with_ethernet or with_etherbone:
@@ -111,7 +108,6 @@ class BaseSoC(SoCCore):
                 msg += "- rx_ctl: a wire must be soldered between R120 and R174\n"
                 msg += "- tx_ctl: a wire must be soldered between ETH1_TXEN (Pad 30) and R173\n"
                 print(msg)
-                time.sleep(2)
                 self.ethphy = LiteEthPHYRGMII(
                     platform           = platform,
                     clock_pads         = platform.request("eth_clocks", eth_phy),
@@ -119,7 +115,6 @@ class BaseSoC(SoCCore):
                     with_hw_init_reset = False)
             # Use Ethernet RMII PMOD.
             else:
-                from litex.build.generic_platform import Pins, Subsignal, IOStandard
                 def eth_lan8720_rmii_pmod_io(pmod):
                     # Lan8020 RMII PHY "PMOD": To be used as a PMOD, MDIO should be disconnected and TX1 connected to PMOD8 IO.
                     return [
@@ -392,6 +387,7 @@ def main():
     parser.add_target_argument("--flash",          action="store_true",      help="Flash bitstream.")
     parser.add_target_argument("--sys-clk-freq",   default=75e6, type=float, help="System clock frequency.")
     parser.add_target_argument("--with-spi-flash", action="store_true",      help="Enable memory-mapped SPI flash.")
+    parser.add_target_argument("--with-i2c",       action="store_true",      help="Enable I2C on PMOD A.")
     ethopts = parser.target_group.add_mutually_exclusive_group()
     ethopts.add_argument("--with-ethernet",  action="store_true", help="Enable Ethernet support.")
     ethopts.add_argument("--with-etherbone", action="store_true", help="Enable Etherbone support.")
@@ -399,12 +395,13 @@ def main():
     parser.add_target_argument("--eth-dynamic-ip", action="store_true",     help="Enable dynamic Ethernet IP assignment.")
     parser.add_target_argument("--remote-ip",      default="192.168.1.100", help="Remote IP address of TFTP server.")
     parser.add_target_argument("--eth-rgmii-phy",  action="store_true",     help="Uses onboard RGMII Phy instead of RMII PMOD.")
-    parser.add_target_argument("--eth-phy",        default=0, type=int,     help="Ethernet PHY: 0 (default) or 1. (Only available with --eth-rgmii-phy")
+    parser.add_target_argument("--eth-phy",        default=0, type=int, choices=[0, 1], help="Ethernet PHY (only available with --eth-rgmii-phy).")
     args = parser.parse_args()
 
     soc = BaseSoC(
         sys_clk_freq   = args.sys_clk_freq,
         with_spi_flash = args.with_spi_flash,
+        with_i2c       = args.with_i2c,
         with_ethernet  = args.with_ethernet,
         with_etherbone = args.with_etherbone,
         eth_ip         = args.eth_ip,

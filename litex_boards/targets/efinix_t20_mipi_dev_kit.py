@@ -35,13 +35,13 @@ class _CRG(LiteXModule):
 
         self.comb += self.cd_rst.clk.eq(clk50)
 
-         # A pulse is necessary to do a reset.
+        # A pulse is necessary to do a reset.
         self.rst_pulse = Signal()
         self.reset_timer = reset_timer = ClockDomainsRenamer("rst")(WaitTimer(25e-6*platform.default_clk_freq))
         self.comb += self.rst_pulse.eq(self.rst ^ reset_timer.done)
         self.comb += reset_timer.wait.eq(self.rst)
 
-        # PLL
+        # PLL.
         self.pll = pll = TRIONPLL(platform)
         self.comb += pll.reset.eq(~rst_n | self.rst_pulse)
         pll.register_clkin(clk50, platform.default_clk_freq)
@@ -81,10 +81,10 @@ def main():
     parser.add_target_argument("--with-spi-flash", action="store_true",       help="Enable memory-mapped SPI flash.")
     args = parser.parse_args()
 
-    soc     = BaseSoC(
+    soc = BaseSoC(
         sys_clk_freq   = args.sys_clk_freq,
         with_spi_flash = args.with_spi_flash,
-         **parser.soc_argdict)
+        **parser.soc_argdict)
     builder = Builder(soc, **parser.builder_argdict)
     if args.build:
         builder.build(**parser.toolchain_argdict)
@@ -95,7 +95,7 @@ def main():
 
     if args.flash:
         from litex.build.openfpgaloader import OpenFPGALoader
-        prog = OpenFPGALoader("trion_t120_bga576")
+        prog = OpenFPGALoader("trion_t20_bga256")
         prog.flash(0, builder.get_bitstream_filename(mode="flash", ext=".hex")) # FIXME
 
 if __name__ == "__main__":

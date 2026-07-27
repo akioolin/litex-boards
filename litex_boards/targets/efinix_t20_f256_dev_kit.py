@@ -60,7 +60,7 @@ class _CRG(LiteXModule):
 # BaseSoC ------------------------------------------------------------------------------------------
 
 class BaseSoC(SoCCore):
-    def __init__(self, sys_clk_freq=100e6, with_spi_flash=False, with_led_chaser=True, **kwargs):
+    def __init__(self, sys_clk_freq=45e6, with_spi_flash=False, with_led_chaser=True, **kwargs):
         platform = efinix_t20_f256_dev_kit.Platform()
 
         # CRG --------------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ class BaseSoC(SoCCore):
         SoCCore.__init__(self, platform, sys_clk_freq, ident="LiteX SoC on Efinix Trion T20 BGA256 Dev Kit", **kwargs)
 
         # SDR SDRAM --------------------------------------------------------------------------------
-        if not self.integrated_main_ram_size and sys_clk_freq <= 50e6 :
+        if not self.integrated_main_ram_size and sys_clk_freq <= 50e6:
             self.specials += ClkOutput(ClockSignal("sys_ps"), platform.request("sdram_clock"))
 
             self.sdrphy = GENSDRPHY(platform.request("sdram"), sys_clk_freq)
@@ -106,7 +106,7 @@ def main():
     soc = BaseSoC(
         sys_clk_freq   = args.sys_clk_freq,
         with_spi_flash = args.with_spi_flash,
-         **parser.soc_argdict)
+        **parser.soc_argdict)
     builder = Builder(soc, **parser.builder_argdict)
     if args.build:
         builder.build(**parser.toolchain_argdict)
@@ -117,7 +117,7 @@ def main():
 
     if args.flash:
         from litex.build.openfpgaloader import OpenFPGALoader
-        prog = OpenFPGALoader("trion_t120_bga576")
+        prog = OpenFPGALoader("trion_t20_bga256")
         prog.flash(0, builder.get_bitstream_filename(mode="flash", ext=".hex")) # FIXME
 
 if __name__ == "__main__":
