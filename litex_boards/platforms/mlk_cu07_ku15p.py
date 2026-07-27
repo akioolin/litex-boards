@@ -5,8 +5,8 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 from litex.build.generic_platform import *
-from litex.build.openfpgaloader import OpenFPGALoader
 from litex.build.xilinx import XilinxUSPPlatform
+from litex.build.openfpgaloader import OpenFPGALoader
 
 # IOs ----------------------------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ _io = [
     ("clk100_ddr", 0,
         Subsignal("p", Pins("AK17")),
         Subsignal("n", Pins("AK16")),
-        IOStandard("DIFF_SSTL12")
+        IOStandard("DIFF_SSTL12"),
     ),
     ("cpu_resetn", 0, Pins("J23"), IOStandard("LVCMOS18"), Misc("PULLTYPE PULLUP")),
 
@@ -38,7 +38,7 @@ _io = [
     ("serial", 0,
         Subsignal("tx", Pins("AN13")),
         Subsignal("rx", Pins("AP13")),
-        IOStandard("LVCMOS33")
+        IOStandard("LVCMOS33"),
     ),
 
     # SDCard.
@@ -47,7 +47,7 @@ _io = [
         Subsignal("cmd",  Pins("A10"), Misc("PULLTYPE PULLUP")),
         Subsignal("data", Pins("B11 A9 C8 B10"), Misc("PULLTYPE PULLUP")),
         Subsignal("cd",   Pins("C11"), Misc("PULLTYPE PULLUP")),
-        IOStandard("LVCMOS18")
+        IOStandard("LVCMOS18"),
     ),
 
     # Runtime QSPI is intentionally omitted. The source pin table assigns C8
@@ -57,10 +57,10 @@ _io = [
     ("i2c", 0,
         Subsignal("scl", Pins("AP11")),
         Subsignal("sda", Pins("AP10")),
-        IOStandard("LVCMOS33")
+        IOStandard("LVCMOS33"),
     ),
 
-    # 4GB DDR4 SDRAM: 4 x Hynix H5AN8G6NCJR-VKI, modeled as MT40A512M16.
+    # DDR4 SDRAM (4GB / 4 x Hynix H5AN8G6NCJR-VKI, modeled as MT40A512M16).
     ("ddram", 0,
         Subsignal("a", Pins(
             "AM34 AN26 AP34 AK26 AL32 AK28 AK32 AL30",
@@ -94,7 +94,7 @@ _io = [
         Subsignal("cke",     Pins("AH27"), IOStandard("SSTL12_DCI")),
         Subsignal("odt",     Pins("AH28"), IOStandard("SSTL12_DCI")),
         Subsignal("reset_n", Pins("AJ26"), IOStandard("LVCMOS12")),
-        Misc("SLEW=FAST")
+        Misc("SLEW=FAST"),
     ),
 ]
 
@@ -108,16 +108,18 @@ class Platform(XilinxUSPPlatform):
         XilinxUSPPlatform.__init__(self, "xcku15p-ffva1156-2-e", _io, toolchain=toolchain)
 
     def create_programmer(self):
-        return OpenFPGALoader(fpga_part="xcku15p-ffva1156", cable="ft2232")
+        return OpenFPGALoader(cable="ft2232", fpga_part="xcku15p-ffva1156")
 
     def do_finalize(self, fragment):
+        XilinxUSPPlatform.do_finalize(self, fragment)
+        self.add_period_constraint(self.lookup_request("clk100", loose=True), 1e9/100e6)
+
+        # Bitstream generation options.
         self.add_platform_command("set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]")
         self.add_platform_command("set_property BITSTREAM.CONFIG.CONFIGRATE 85.0 [current_design]")
         self.add_platform_command("set_property BITSTREAM.CONFIG.SPI_FALL_EDGE YES [current_design]")
-        self.add_platform_command("set_property BITSTREAM.GENERAL.COMPRESS true [current_design]")
+        self.add_platform_command("set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]")
         self.add_platform_command("set_property CONFIG_VOLTAGE 1.8 [current_design]")
         self.add_platform_command("set_property CFGBVS GND [current_design]")
         self.add_platform_command("set_property CONFIG_MODE SPIx4 [current_design]")
-        self.add_platform_command("set_property BITSTREAM.CONFIG.UNUSEDPIN pulldown [current_design]")
-        XilinxUSPPlatform.do_finalize(self, fragment)
-        self.add_period_constraint(self.lookup_request("clk100", loose=True), 1e9/100e6)
+        self.add_platform_command("set_property BITSTREAM.CONFIG.UNUSEDPIN PULLDOWN [current_design]")
