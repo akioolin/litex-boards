@@ -150,7 +150,9 @@ class BaseSoC(SoCCore):
 
             self.submodules.ddrphy = ECP5DDRPHY(
                 pads = PHYPadsReducer(platform.request("ddram"), [0, 1]),
-                sys_clk_freq=sys_clk_freq)
+                    sys_clk_freq = sys_clk_freq,
+                    dm_skip      = True,
+                )
             self.comb += self.crg.stop.eq(self.ddrphy.init.stop)
             self.comb += self.crg.reset.eq(self.ddrphy.init.reset)
             self.add_sdram("sdram",
