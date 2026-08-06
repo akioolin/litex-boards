@@ -147,6 +147,9 @@ class BaseSoC(SoCCore):
                 "MT41K512M16": MT41K512M16,
             }
             sdram_module = available_sdram_modules.get(sdram_device)
+            l2_cache_size = kwargs.get("l2_size", 8192)
+            if not l2_cache_size:
+                raise ValueError("ULX4M-LD DDR3 requires an L2 cache when DM is disabled.")
 
             self.submodules.ddrphy = ECP5DDRPHY(
                 pads         = PHYPadsReducer(platform.request("ddram"), [0, 1]),
@@ -158,7 +161,7 @@ class BaseSoC(SoCCore):
             self.add_sdram("sdram",
                 phy           = self.ddrphy,
                 module        = sdram_module(sys_clk_freq, "1:4"),
-                l2_cache_size = kwargs.get("l2_size", 8192)
+                l2_cache_size = l2_cache_size,
             )
 
         # Ethernet / Etherbone ---------------------------------------------------------------------
